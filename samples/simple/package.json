@@ -1,0 +1,19 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "copy:firebase": "cp ./node_modules/firebase/firebase.js ./public/js/firebase.js",
+    "copy:rs": "cp ./node_modules/remote-styles/window/index.iife.js ./public/js/remote-styles.js",
+    "clean": "rm -rf ./public/js && mkdir ./public/js",
+    "build": "npm run clean && npm run copy:rs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^7.2.0",
+    "remote-styles": "file:../../remote-styles-0.0.1.tgz"
+  }
+}

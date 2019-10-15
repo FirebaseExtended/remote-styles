@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Remote Styles Sample</title>
+  <script src="/js/remote-styles.js"></script>
+</head>
+
+<body>
+  <h1>Hai</h1>
+  <script>
+    async function main() {
+      const remoteStyles = await remote_styles_window.initializeRemoteStyles({
+        apiKey: "AIzaSyDe1HdFD6GRusLp8ZPoIV12U9JTpMvyVOA",
+        authDomain: "davidea-st.firebaseapp.com",
+        databaseURL: "https://davidea-st.firebaseio.com",
+        projectId: "davidea-st",
+        storageBucket: "davidea-st.appspot.com",
+        messagingSenderId: "202554175013",
+        appId: "1:202554175013:web:28fc035426254c43",
+        measurementId: "G-79J291VQBX"
+      });
+      const configTheme = await remoteStyles('config_theme');
+      debugger;
+      configTheme.insert();
+      debugger;
+    }  
+  </script>
+</body>
+
+</html>

@@ -12,30 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FirebaseRemoteConfig, RemoteRule, RemoteStyle } from './types';
+import { FirebaseRemoteConfig, RemoteRule, FirebaseApp } from './types';
 import { createRules } from './rules';
 
+/**
+ * Return a value from Remote Config as a parsed JSON object
+ * @param remoteConfig 
+ * @param key 
+ */
 function getValueAsObject(remoteConfig: FirebaseRemoteConfig, key: string) {
   return JSON.parse(remoteConfig.getValue(key).asString());
 }
 
+/**
+ * Create a new CSSStyleSheet if one is not passed as a parameter
+ * @param sheet 
+ */
 function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
   return sheet == undefined ? createSheet() : sheet;
 }
 
-async function fetchStyles(remoteConfig: FirebaseRemoteConfig, key: string) {
+/**
+ * 
+ * @param remoteConfig 
+ * @param key 
+ */
+async function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
   await remoteConfig.fetchAndActivate();
-  const remoteStyles = getValueAsObject(remoteConfig, key);
-  return createRules(remoteStyles);
+  const styleObjects = getValueAsObject(remoteConfig, key);
+  return createRules(styleObjects);
 } 
 
+/**
+ * Insert enabled rules into a stylesheet.
+ * @param rules 
+ * @param sheet 
+ */
 function _insertRules(rules: RemoteRule[], sheet: CSSStyleSheet) {
   return rules
     .filter(r => r.enabled)
     .forEach(r => sheet.insertRule(r.cssText, r.index));
 }
 
-function createSheet(): CSSStyleSheet {
+/**
+ * Create a CSSStylesheet and attach it to the document.
+ */
+function createSheet(document = window.document): CSSStyleSheet {
   const style = document.createElement('style');
   // WebKit hack
   style.appendChild(document.createTextNode(''));
@@ -44,14 +66,17 @@ function createSheet(): CSSStyleSheet {
   return style.sheet as CSSStyleSheet;
 }
 
-async function fetchAndActivateStyles(remoteConfig: FirebaseRemoteConfig, key: string, sheet?: CSSStyleSheet) {
-  const rules = await fetchStyles(remoteConfig, key);
+async function remoteStyles(firebaseApp: FirebaseApp, key: string, sheet?: CSSStyleSheet) {
+  const rules = await createRulesFromRemoteConfig(firebaseApp.remoteConfig(), key);
   const _sheet = checkSheet(sheet);
   return {
-    insertRules: () => _insertRules(rules, _sheet)
-  }
+    insert: () => _insertRules(rules, _sheet),
+    rules: () => rules,
+    sheet: () => _sheet,
+    firebaseApp: () => firebaseApp,
+  };
 }
 
 export { 
-  fetchAndActivateStyles, 
+  remoteStyles, 
 };

@@ -13,10 +13,16 @@
 // limitations under the License.
 
 import { FirebaseFeature, NullableFirebaseApp } from '../types';
-import { fetchAndActivateStyles } from '../';
+import { remoteStyles } from '../';
 
+// Fixed Firebase version to use from CDN
 const FIREBASE_VERSION = '7.2.0';
 
+/**
+ * Create a script from a src. Promise resolves when script loads.
+ * @param src 
+ * @param document 
+ */
 function loadScript(src: string, document = window.document): Promise<Event> {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -27,23 +33,40 @@ function loadScript(src: string, document = window.document): Promise<Event> {
   });
 }
 
+/**
+ * Load a Firebase script from the CDN
+ * @param version 
+ * @param feature 
+ */
 function loadFirebaseScript(version: string, feature: FirebaseFeature) {
   return loadScript(`https://www.gstatic.com/firebasejs/${version}/firebase-${feature}.js`)
 }
 
+/**
+ * Load the Firebase App script
+ */
 function loadFirebaseApp() {
   return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.app)
     .then(() => window.firebase);
 }
 
+/**
+ * Load the Analytics script
+ */
 function loadAnalytics() {
   return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.analytics);
 }
 
+/**
+ * Load the Remote Config script
+ */
 function loadRemoteConfig() {
   return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.remoteConfig);
 }
 
+/**
+ * Load the needed Firebase features for the remote-styles library.
+ */
 async function loadFirebaseFeatures() {
   // Firebase App must be loaded first
   const firebase = await loadFirebaseApp();
@@ -54,6 +77,12 @@ async function loadFirebaseFeatures() {
   ]).then(([firebase]) => firebase);
 }
 
+/**
+ * Check the window for an existing Firebase App
+ * @param window 
+ * @param options 
+ * @param name 
+ */
 function checkWindowForLocalApp(window: any, options: any, name: string): NullableFirebaseApp {
   if(window.firebase != undefined) {
     if(window.firebase.apps.length > 0) {
@@ -65,12 +94,21 @@ function checkWindowForLocalApp(window: any, options: any, name: string): Nullab
   }
 }
 
+/**
+ * Check a Firebase App to see if it exists and has the needed features for remote-styles.
+ * @param firebaseApp 
+ */
 function firebaseAppHasNeededFeatures(firebaseApp: NullableFirebaseApp) {
   return firebaseApp != undefined && 
          firebaseApp.analytics != undefined && 
          firebaseApp.remoteConfig != undefined;  
 }
 
+/**
+ * Initialize a Firebase App with a lazy loaded strategy.
+ * @param options 
+ * @param name 
+ */
 async function initializeLazyApp(options: any, name = '[DEFAULT]') {
   const windowApp = checkWindowForLocalApp(window, options, name);
   if(firebaseAppHasNeededFeatures(windowApp)) {
@@ -81,12 +119,16 @@ async function initializeLazyApp(options: any, name = '[DEFAULT]') {
   }
 }
 
-async function initializeStyles(options: any, name = '[DEFAULT]') {
+/**
+ * Create an instance of remoteStyles with a lazy loaded strategy
+ * @param options 
+ * @param name 
+ */
+async function initializeRemoteStyles(options: any, name = '[DEFAULT]') {
   const firebaseApp = await initializeLazyApp(options, name);
-  const remoteConfig = firebaseApp.remoteConfig();
-  return function(key: string, sheet?: CSSStyleSheet) {
-    return fetchAndActivateStyles(remoteConfig, key, sheet);
+  return function _remoteStyles(key: string, sheet?: CSSStyleSheet) {
+    return remoteStyles(firebaseApp, key, sheet);
   }
 }
 
-export { initializeLazyApp, initializeStyles };
+export { initializeLazyApp, initializeRemoteStyles };
