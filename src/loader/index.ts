@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { FirebaseFeature, NullableFirebaseApp } from '../types';
-import { remoteStyles } from '../';
+import { remoteStyles } from '..';
 
 // Fixed Firebase version to use from CDN
 const FIREBASE_VERSION = '7.2.0';

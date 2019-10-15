@@ -28,19 +28,19 @@ const MAIN_MODULE_CONFIG = {
 const MAIN_IIFE_CONFIG = {
   input: './src/index.ts',
   output: {
-    file: './dist/packages-dist/remote-styles/index.iife.js',
+    file: './dist/packages-dist/remote-styles/remote-styles.js',
     format: 'iife',
-    name: 'remote_styles',
+    name: 'remoteStyles',
   },
   plugins: [
     typescript(),
   ],
 };
 
-const WINDOW_MODULE_CONFIG = {
-  input: './src/window/index.ts',
+const LOADER_MODULE_CONFIG = {
+  input: './src/loader/index.ts',
   output: {
-    file: './dist/packages-dist/remote-styles/window/index.js',
+    file: './dist/packages-dist/remote-styles/loader/index.js',
     format: 'esm',
   },
   plugins: [
@@ -48,12 +48,12 @@ const WINDOW_MODULE_CONFIG = {
   ],
 };
 
-const WINDOW_IIFE_CONFIG = {
-  input: './src/window/index.ts',
+const LOADER_IIFE_CONFIG = {
+  input: './src/loader/index.ts',
   output: {
-    file: './dist/packages-dist/remote-styles/window/index.iife.js',
+    file: './dist/packages-dist/remote-styles/loader/remote-styles-loader.js',
     format: 'iife',
-    name: 'remote_styles_window',
+    name: 'remoteStyles',
   },
   plugins: [
     typescript(),
@@ -63,6 +63,6 @@ const WINDOW_IIFE_CONFIG = {
 export default [
   MAIN_MODULE_CONFIG,
   MAIN_IIFE_CONFIG,
-  WINDOW_MODULE_CONFIG,
-  WINDOW_IIFE_CONFIG,
+  LOADER_MODULE_CONFIG,
+  LOADER_IIFE_CONFIG,
 ];

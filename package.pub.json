@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "browser": "index.iife.js",
+  "browser": "remote-styles.js",
   "keywords": [],
   "author": "<David East: deast@google.com>",
   "license": "Apache 2.0",

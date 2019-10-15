@@ -4,7 +4,8 @@
     "target": "es6",
     "outDir": "dist",
     "moduleResolution": "node",
-    "strict": true
+    "strict": true,
+    "removeComments": true
   },
   "files": [
     "src/index.ts"

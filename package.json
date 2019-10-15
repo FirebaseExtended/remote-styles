@@ -8,8 +8,8 @@
     "clean": "rm -rf ./dist",
     "rollup": "rollup --config",
     "copy:pub": "cp ./package.pub.json  ./dist/packages-dist/remote-styles/package.json",
-    "copy:pub:window": "cp ./package.pub.window.json ./dist/packages-dist/remote-styles/window/package.json",
-    "build": "npm run clean && npm run rollup && npm run copy:pub && npm run copy:pub:window"
+    "copy:pub:loader": "cp ./package.pub.loader.json ./dist/packages-dist/remote-styles/loader/package.json",
+    "build": "npm run clean && npm run rollup && npm run copy:pub && npm run copy:pub:loader"
   },
   "keywords": [],
   "author": "",
