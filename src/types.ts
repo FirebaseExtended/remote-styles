@@ -14,6 +14,7 @@
 
 // These import types keep us from including Firebase in the bundle, but 
 // while still getting the types we need.
+
 type FirebaseRemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
 type FirebaseApp = import('firebase/app').app.App;
 type FirebaseAnalytics = import('firebase/app').analytics.Analytics;

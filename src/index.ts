@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { FirebaseRemoteConfig, RemoteRule, RemoteStyle } from './types';
+import { createRules } from './rules';
 
 function getValueAsObject(remoteConfig: FirebaseRemoteConfig, key: string) {
   return JSON.parse(remoteConfig.getValue(key).asString());
@@ -34,15 +35,6 @@ function _insertRules(rules: RemoteRule[], sheet: CSSStyleSheet) {
     .forEach(r => sheet.insertRule(r.cssText, r.index));
 }
 
-function createRules(remoteStyles: RemoteStyle[]): RemoteRule[] {
-  return remoteStyles.map(config => {
-    const enabled = config.enabled == undefined ? true : config.enabled;
-    const cssText = config.selectorText + '{' + config.properties.join('\n') + '}';
-    const index = config.index == undefined ? -1 : config.index;
-    return { cssText, index, enabled };
-  });
-}
-
 function createSheet(): CSSStyleSheet {
   const style = document.createElement('style');
   // WebKit hack
@@ -60,8 +52,6 @@ async function fetchAndActivateStyles(remoteConfig: FirebaseRemoteConfig, key: s
   }
 }
 
-function sum(a: number, b: number) {
-  return a + b;
-}
-
-export { fetchAndActivateStyles, sum };
+export { 
+  fetchAndActivateStyles, 
+};
