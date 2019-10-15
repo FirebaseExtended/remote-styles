@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "strict": true
+  },
+  "files": [
+    "src/index.ts"
+  ]
+}
