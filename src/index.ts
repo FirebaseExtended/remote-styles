@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FirebaseRemoteConfig, RemoteRule, FirebaseApp, RemoteStylesOptions } from './types';
+import { FirebaseRemoteConfig, RemoteRule, FirebaseApp } from './types';
 import { createRules } from './rules';
 
 /**
@@ -41,9 +41,8 @@ function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
  * @param key 
  */
 function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
-  const styleObjects = getValueAsObject(remoteConfig, key);
-  return createRules(styleObjects);
-} 
+  return createRules(getValueAsObject(remoteConfig, key));
+}
 
 /**
  * Insert enabled rules into a stylesheet.

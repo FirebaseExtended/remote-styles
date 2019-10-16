@@ -40,11 +40,6 @@ interface RemoteRule {
   enabled: boolean;
 }
 
-interface RemoteStylesOptions { 
-  firebaseApp: FirebaseApp, 
-  sheet?: CSSStyleSheet 
-}
-
 export {
   FirebaseApp,
   FirebaseAnalytics,
@@ -56,5 +51,4 @@ export {
 
   RemoteStyle,
   RemoteRule,
-  RemoteStylesOptions,
 };
