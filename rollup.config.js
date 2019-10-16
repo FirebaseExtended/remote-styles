@@ -14,6 +14,12 @@
 
 import typescript from 'rollup-plugin-typescript';
 
+const IIFE_NAME = 'remoteStyles';
+
+/**
+ * This config builds the core lib for webpack users
+ * ex: import { initialize } from 'remote-styles';
+ */
 const MAIN_MODULE_CONFIG = {
   input: './src/index.ts',
   output: {
@@ -25,18 +31,26 @@ const MAIN_MODULE_CONFIG = {
   ],
 };
 
+/**
+ * This config builds the core lib for script tag users
+ * ex: <script src="/remote-styles.js"></script>;
+ */
 const MAIN_IIFE_CONFIG = {
   input: './src/index.ts',
   output: {
     file: './dist/packages-dist/remote-styles/remote-styles.js',
     format: 'iife',
-    name: 'remoteStyles',
+    name: IIFE_NAME,
   },
   plugins: [
     typescript(),
   ],
 };
 
+/**
+ * This config builds the loader lib for webpack users
+ * ex: import { initialize } from 'remote-styles/loader';
+ */
 const LOADER_MODULE_CONFIG = {
   input: './src/loader/index.ts',
   output: {
@@ -48,12 +62,16 @@ const LOADER_MODULE_CONFIG = {
   ],
 };
 
+/**
+ * This config builds the loader lib for script tag users
+ * ex: <script src="/remote-styles-loader.js"></script>;
+ */
 const LOADER_IIFE_CONFIG = {
   input: './src/loader/index.ts',
   output: {
     file: './dist/packages-dist/remote-styles/loader/remote-styles-loader.js',
     format: 'iife',
-    name: 'remoteStyles',
+    name: IIFE_NAME,
   },
   plugins: [
     typescript(),
