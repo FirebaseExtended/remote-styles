@@ -2,6 +2,13 @@
 
 > Load CSS from Firebase Remote Config
 
+## Install
+```
+npm i remote-styles firebase
+# OR
+yarn add remote-styles firebase
+```
+
 ## Basic Example
 
 ```ts

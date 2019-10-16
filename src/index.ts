@@ -41,7 +41,8 @@ function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
  * @param key 
  */
 function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
-  return createRules(getValueAsObject(remoteConfig, key));
+  return remoteConfig.getString(key);
+  // return createRules(getValueAsObject(remoteConfig, key));
 }
 
 /**
@@ -59,19 +60,40 @@ function _insertRules(rules: RemoteRule[], sheet: CSSStyleSheet) {
  * Create a CSSStylesheet and attach it to the document.
  */
 function createSheet(document = window.document): CSSStyleSheet {
-  const style = document.createElement('style');
-  // WebKit hack
-  style.appendChild(document.createTextNode(''));
-  document.head.appendChild(style);
+  let sheet;
+  try {
+    sheet = new CSSStyleSheet();
+  } catch(e) {
+    const style = document.createElement('style');
+    // WebKit hack
+    style.appendChild(document.createTextNode(''));
+    document.head.appendChild(style);
+    sheet = style.sheet;
+  }
   // TODO(davideast): Figure out why this returns the wrong type?
-  return style.sheet as CSSStyleSheet;
+  return sheet as CSSStyleSheet;
+}
+
+function applyCss(sheet: CSSStyleSheet, css: string, document = window.document): CSSStyleSheet {
+  try {
+    // Constructable Stylesheets available in Chrome 66+ only
+    // TODO(davideast): Properly fix this TypeScript hack
+    // TypeScript does not recognize adoptedStyleSheets since it is new
+    const _sheet = sheet as any;
+    const doc: any = document; 
+    _sheet.replaceSync(css);
+    doc.adoptedStyleSheets = doc.adoptedStyleSheets.concat(sheet);
+  } catch (e) {
+    sheet.ownerNode.appendChild(document.createTextNode(css));
+  }
+  return sheet;
 }
 
 function remoteStyles(key: string, sheet: CSSStyleSheet, firebaseApp: FirebaseApp) {
-  const rules = createRulesFromRemoteConfig(firebaseApp.remoteConfig(), key);
+  const stylesString = firebaseApp.remoteConfig().getString(key);
   return {
-    insert: () => _insertRules(rules, sheet),
-    rules: () => rules,
+    insert: () => applyCss(sheet, stylesString),
+    styles: () => stylesString,
     sheet: () => sheet,
     firebaseApp: () => firebaseApp,
   };
