@@ -15,10 +15,7 @@
  * limitations under the License.
  */
 
-type FirebaseRemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
 type FirebaseApp = import('firebase/app').app.App;
-type FirebaseAnalytics = import('firebase/app').analytics.Analytics;
-type FirebasePerformance = import('firebase/app').performance.Performance;
 type NullableFirebaseApp = FirebaseApp | null | undefined;
 
 enum FirebaseFeature {
@@ -36,9 +33,6 @@ interface RemoteStyle {
 
 export {
   FirebaseApp,
-  FirebaseAnalytics,
-  FirebaseRemoteConfig,
-  FirebasePerformance,
   NullableFirebaseApp,
 
   FirebaseFeature,
