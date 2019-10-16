@@ -14,6 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "firebase": "^7.2.0",
-    "remote-styles": "file:../../remote-styles-0.0.1.tgz"
+    "remote-styles": "file:../../remote-styles-0.0.2.tgz"
   }
 }

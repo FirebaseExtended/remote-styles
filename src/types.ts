@@ -28,16 +28,10 @@ enum FirebaseFeature {
 }
 
 interface RemoteStyle {
-  selectorText: string;
-  properties: string[];
-  enabled?: boolean;
-  index?: number;
-}
-
-interface RemoteRule {
-  cssText: string;
-  index: number;
-  enabled: boolean;
+  insert: Function,
+  asString: () => string,
+  sheet: () => CSSStyleSheet,
+  firebaseApp: () => FirebaseApp,
 }
 
 export {
@@ -48,7 +42,5 @@ export {
   NullableFirebaseApp,
 
   FirebaseFeature,
-
   RemoteStyle,
-  RemoteRule,
 };

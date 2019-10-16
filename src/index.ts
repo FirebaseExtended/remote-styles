@@ -15,20 +15,7 @@
  * limitations under the License.
  */
 
-import { FirebaseRemoteConfig, RemoteRule, FirebaseApp } from './types';
-import { createRules } from './rules';
-
-/**
- * Return a value from Remote Config as a parsed JSON object
- * @param remoteConfig 
- * @param key 
- */
-function getValueAsObject(remoteConfig: FirebaseRemoteConfig, key: string) {
-  const stringValue = remoteConfig.getValue(key).asString();
-  const EMPTY_STRING = ''.trim();
-  if(stringValue === EMPTY_STRING) { return EMPTY_STRING; }
-  return JSON.parse(stringValue);
-}
+import { FirebaseApp, RemoteStyle } from './types';
 
 /**
  * Create a new CSSStyleSheet if one is not passed as a parameter
@@ -36,27 +23,6 @@ function getValueAsObject(remoteConfig: FirebaseRemoteConfig, key: string) {
  */
 function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
   return sheet == undefined ? createSheet() : sheet;
-}
-
-/**
- * 
- * @param remoteConfig 
- * @param key 
- */
-function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
-  return remoteConfig.getString(key);
-  // return createRules(getValueAsObject(remoteConfig, key));
-}
-
-/**
- * Insert enabled rules into a stylesheet.
- * @param rules 
- * @param sheet 
- */
-function _insertRules(rules: RemoteRule[], sheet: CSSStyleSheet) {
-  return rules
-    .filter(r => r.enabled)
-    .forEach(r => sheet.insertRule(r.cssText, r.index));
 }
 
 /**
@@ -77,7 +43,7 @@ function createSheet(document = window.document): CSSStyleSheet {
   return sheet as CSSStyleSheet;
 }
 
-function applyCss(sheet: CSSStyleSheet, css: string, document = window.document): CSSStyleSheet {
+function insertCSS(sheet: CSSStyleSheet, css: string, document = window.document) {
   try {
     // Constructable Stylesheets available in Chrome 66+ only
     // TODO(davideast): Properly fix this TypeScript hack
@@ -89,14 +55,13 @@ function applyCss(sheet: CSSStyleSheet, css: string, document = window.document)
   } catch (e) {
     sheet.ownerNode.appendChild(document.createTextNode(css));
   }
-  return sheet;
 }
 
-function remoteStyles(key: string, sheet: CSSStyleSheet, firebaseApp: FirebaseApp) {
+function remoteStyles(key: string, sheet: CSSStyleSheet, firebaseApp: FirebaseApp): RemoteStyle {
   const stylesString = firebaseApp.remoteConfig().getString(key);
   return {
-    insert: () => applyCss(sheet, stylesString),
-    styles: () => stylesString,
+    insert: () => insertCSS(sheet, stylesString),
+    asString: () => stylesString,
     sheet: () => sheet,
     firebaseApp: () => firebaseApp,
   };
