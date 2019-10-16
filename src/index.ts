@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FirebaseRemoteConfig, RemoteRule, FirebaseApp } from './types';
+import { FirebaseRemoteConfig, RemoteRule, FirebaseApp, RemoteStylesOptions } from './types';
 import { createRules } from './rules';
 
 /**
@@ -21,7 +21,10 @@ import { createRules } from './rules';
  * @param key 
  */
 function getValueAsObject(remoteConfig: FirebaseRemoteConfig, key: string) {
-  return JSON.parse(remoteConfig.getValue(key).asString());
+  const stringValue = remoteConfig.getValue(key).asString();
+  const EMPTY_STRING = ''.trim();
+  if(stringValue === EMPTY_STRING) { return EMPTY_STRING; }
+  return JSON.parse(stringValue);
 }
 
 /**
@@ -37,8 +40,7 @@ function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
  * @param remoteConfig 
  * @param key 
  */
-async function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
-  await remoteConfig.fetchAndActivate();
+function createRulesFromRemoteConfig(remoteConfig: FirebaseRemoteConfig, key: string) {
   const styleObjects = getValueAsObject(remoteConfig, key);
   return createRules(styleObjects);
 } 
@@ -66,17 +68,28 @@ function createSheet(document = window.document): CSSStyleSheet {
   return style.sheet as CSSStyleSheet;
 }
 
-async function remoteStyles(firebaseApp: FirebaseApp, key: string, sheet?: CSSStyleSheet) {
-  const rules = await createRulesFromRemoteConfig(firebaseApp.remoteConfig(), key);
-  const _sheet = checkSheet(sheet);
+function remoteStyles(key: string, sheet: CSSStyleSheet, firebaseApp: FirebaseApp) {
+  const rules = createRulesFromRemoteConfig(firebaseApp.remoteConfig(), key);
   return {
-    insert: () => _insertRules(rules, _sheet),
+    insert: () => _insertRules(rules, sheet),
     rules: () => rules,
-    sheet: () => _sheet,
+    sheet: () => sheet,
     firebaseApp: () => firebaseApp,
   };
 }
 
+function checkFunction(fn?: Function) {
+  return fn == undefined ? () => {} : fn;
+}
+
+async function initialize(firebaseApp: FirebaseApp, optionsCallback?: (app: FirebaseApp) => void) {
+  checkFunction(optionsCallback)();
+  await firebaseApp.remoteConfig().fetchAndActivate();
+  return function _remoteStyles(key: string, sheet?: CSSStyleSheet) {
+    return remoteStyles(key, checkSheet(sheet), firebaseApp);
+  }
+}
+
 export { 
-  remoteStyles, 
+  initialize, 
 };

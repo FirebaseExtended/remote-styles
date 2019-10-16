@@ -24,7 +24,6 @@ type NullableFirebaseApp = FirebaseApp | null | undefined;
 enum FirebaseFeature {
   app = 'app',
   analytics = 'analytics',
-  performance = 'performance',
   remoteConfig = 'remote-config',
 }
 
@@ -41,6 +40,10 @@ interface RemoteRule {
   enabled: boolean;
 }
 
+interface RemoteStylesOptions { 
+  firebaseApp: FirebaseApp, 
+  sheet?: CSSStyleSheet 
+}
 
 export {
   FirebaseApp,
@@ -53,4 +56,5 @@ export {
 
   RemoteStyle,
   RemoteRule,
+  RemoteStylesOptions,
 };

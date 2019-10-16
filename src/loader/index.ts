@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FirebaseFeature, NullableFirebaseApp } from '../types';
-import { remoteStyles } from '..';
+import { FirebaseFeature, NullableFirebaseApp, FirebaseApp } from '../types';
+import { initialize as initializeRemoteStyles } from '../';
 
 // Fixed Firebase version to use from CDN
 const FIREBASE_VERSION = '7.2.0';
@@ -86,7 +86,7 @@ async function loadFirebaseFeatures() {
 function checkWindowForLocalApp(window: any, options: any, name: string): NullableFirebaseApp {
   if(window.firebase != undefined) {
     if(window.firebase.apps.length > 0) {
-      return window.firebase.apps.filter(a => a.name === name)[0];
+      return window.firebase.apps.filter(app => app.name === name)[0];
     }
     return window.firebase.initializeApp(options);
   } else {
@@ -124,11 +124,9 @@ async function initializeLazyApp(options: any, name = '[DEFAULT]') {
  * @param options 
  * @param name 
  */
-async function initializeRemoteStyles(options: any, name = '[DEFAULT]') {
+async function initialize(options: any, optionsCallback?: (app: FirebaseApp) => void, name = '[DEFAULT]') {
   const firebaseApp = await initializeLazyApp(options, name);
-  return function _remoteStyles(key: string, sheet?: CSSStyleSheet) {
-    return remoteStyles(firebaseApp, key, sheet);
-  }
+  return initializeRemoteStyles(firebaseApp, optionsCallback);
 }
 
-export { initializeLazyApp, initializeRemoteStyles };
+export { initializeLazyApp, initialize };
