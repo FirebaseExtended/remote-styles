@@ -15,18 +15,20 @@
  * limitations under the License.
  */
 
-import { FirebaseFeature, NullableFirebaseApp, FirebaseApp } from '../types';
+import { FirebaseFeature, NullableFirebaseApp, LoaderOptions } from '../types';
 import { initialize as initializeRemoteStyles } from '../';
 
 // Fixed Firebase version to use from CDN
 const FIREBASE_VERSION = '7.2.0';
+// Default name of a Firebase app when no name is provided
+const DEFAULT_APP = '[DEFAULT]';
 
 /**
  * Create a script from a src. Promise resolves when script loads.
  * @param src 
  * @param document 
  */
-function loadScript(src: string, document = window.document): Promise<Event> {
+function loadScript(src: string): Promise<Event> {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;
@@ -48,36 +50,37 @@ function loadFirebaseScript(version: string, feature: FirebaseFeature) {
 /**
  * Load the Firebase App script
  */
-function loadFirebaseApp() {
-  return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.app)
+function loadFirebaseApp(version: string) {
+  return loadFirebaseScript(version, FirebaseFeature.app)
     .then(() => window.firebase);
 }
 
 /**
  * Load the Analytics script
  */
-function loadAnalytics() {
-  return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.analytics);
+function loadAnalytics(version: string) {
+  return loadFirebaseScript(version, FirebaseFeature.analytics);
 }
 
 /**
  * Load the Remote Config script
  */
-function loadRemoteConfig() {
-  return loadFirebaseScript(FIREBASE_VERSION, FirebaseFeature.remoteConfig);
+function loadRemoteConfig(version: string) {
+  return loadFirebaseScript(version, FirebaseFeature.remoteConfig);
 }
 
 /**
  * Load the needed Firebase features for the remote-styles library.
  */
-async function loadFirebaseFeatures() {
+function loadFirebaseFeatures(version: string) {
   // Firebase App must be loaded first
-  const firebase = await loadFirebaseApp();
-  return Promise.all([
-    Promise.resolve(firebase),
-    loadAnalytics(),
-    loadRemoteConfig(),
-  ]).then(([firebase]) => firebase);
+  return loadFirebaseApp(version).then(firebase => {
+    return Promise.all([
+      Promise.resolve(firebase),
+      loadAnalytics(version),
+      loadRemoteConfig(version),
+    ]).then(modules => modules[0]);
+  });
 }
 
 /**
@@ -112,13 +115,14 @@ function firebaseAppHasNeededFeatures(firebaseApp: NullableFirebaseApp) {
  * @param options 
  * @param name 
  */
-async function initializeLazyApp(options: any, name = '[DEFAULT]') {
+function initializeLazyApp(options: any, name = DEFAULT_APP, version = FIREBASE_VERSION) {
   const windowApp = checkWindowForLocalApp(window, options, name);
   if(firebaseAppHasNeededFeatures(windowApp)) {
     return Promise.resolve(windowApp);
   } else {
-    const firebase = await loadFirebaseFeatures();
-    return firebase.initializeApp(options, name);
+    return loadFirebaseFeatures(version).then(firebase => {
+      return firebase.initializeApp(options, name);
+    });
   }
 }
 
@@ -127,9 +131,10 @@ async function initializeLazyApp(options: any, name = '[DEFAULT]') {
  * @param options 
  * @param name 
  */
-async function initialize(options: any, optionsCallback?: (app: FirebaseApp) => void, name = '[DEFAULT]') {
-  const firebaseApp = await initializeLazyApp(options, name);
-  return initializeRemoteStyles(firebaseApp, optionsCallback);
+function initialize(options: any, { settings, name, version }: LoaderOptions) {
+  return initializeLazyApp(options, name, version).then(firebaseApp => {
+    return initializeRemoteStyles(firebaseApp, settings);
+  });
 }
 
 export { initializeLazyApp, initialize };

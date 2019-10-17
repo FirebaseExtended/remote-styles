@@ -28,7 +28,7 @@ function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
 /**
  * Create a CSSStylesheet and attach it to the document.
  */
-function createSheet(document = window.document): CSSStyleSheet {
+function createSheet(): CSSStyleSheet {
   let sheet;
   try {
     sheet = new CSSStyleSheet();
@@ -43,7 +43,7 @@ function createSheet(document = window.document): CSSStyleSheet {
   return sheet as CSSStyleSheet;
 }
 
-function insertCSS(sheet: CSSStyleSheet, css: string, document = window.document) {
+function insertCSS(sheet: CSSStyleSheet, css: string) {
   try {
     // Constructable Stylesheets available in Chrome 66+ only
     // TODO(davideast): Properly fix this TypeScript hack
@@ -71,12 +71,13 @@ function checkFunction(fn?: Function) {
   return fn == undefined ? () => {} : fn;
 }
 
-async function initialize(firebaseApp: FirebaseApp, optionsCallback?: (app: FirebaseApp) => void) {
+function initialize(firebaseApp: FirebaseApp, optionsCallback?: (app: FirebaseApp) => void) {
   checkFunction(optionsCallback)();
-  await firebaseApp.remoteConfig().fetchAndActivate();
-  return function _remoteStyles(key: string, sheet?: CSSStyleSheet) {
-    return remoteStyles(key, checkSheet(sheet), firebaseApp);
-  }
+  return firebaseApp.remoteConfig().fetchAndActivate().then(() => {
+    return function _remoteStyles(key: string, sheet?: CSSStyleSheet) {
+      return remoteStyles(key, checkSheet(sheet), firebaseApp);
+    }
+  });
 }
 
 export { 

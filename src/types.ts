@@ -31,10 +31,17 @@ interface RemoteStyle {
   firebaseApp: () => FirebaseApp,
 }
 
+interface LoaderOptions { 
+  settings?: (app: FirebaseApp) => void;
+  name?: string; 
+  version?: string; 
+}
+
 export {
   FirebaseApp,
   NullableFirebaseApp,
 
   FirebaseFeature,
   RemoteStyle,
+  LoaderOptions,
 };

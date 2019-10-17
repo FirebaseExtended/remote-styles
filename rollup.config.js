@@ -16,6 +16,7 @@
  */
 
 import typescript from 'rollup-plugin-typescript';
+import { uglify } from "rollup-plugin-uglify";
 
 const IIFE_NAME = 'remoteStyles';
 
@@ -30,7 +31,7 @@ const MAIN_MODULE_CONFIG = {
     format: 'esm',
   },
   plugins: [
-    typescript(),
+    typescript({ target: 'esnext' }),
   ],
 };
 
@@ -46,7 +47,8 @@ const MAIN_IIFE_CONFIG = {
     name: IIFE_NAME,
   },
   plugins: [
-    typescript(),
+    typescript({ target: 'es5' }),
+    uglify(),
   ],
 };
 
@@ -61,7 +63,7 @@ const LOADER_MODULE_CONFIG = {
     format: 'esm',
   },
   plugins: [
-    typescript(),
+    typescript({ target: 'esnext' }),
   ],
 };
 
@@ -77,7 +79,8 @@ const LOADER_IIFE_CONFIG = {
     name: IIFE_NAME,
   },
   plugins: [
-    typescript(),
+    typescript({ target: 'es5' }),
+    uglify(),
   ],
 };
 
