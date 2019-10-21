@@ -17,76 +17,125 @@
 
 import typescript from 'rollup-plugin-typescript';
 import { uglify } from "rollup-plugin-uglify";
+import copy from 'rollup-plugin-copy'
 
 const IIFE_NAME = 'remoteStyles';
+
+const baseConfig = ({ input, distSubFile, format, target, name, plugins = [] }) => ({
+    input,
+    output: {
+      file: `./dist/${distSubFile}`,
+      format,
+      name,
+    },
+    plugins:[
+      typescript({ target }),
+      ...plugins
+    ],
+})
+
+const mainConfig = ({ distSubFile, format, target, name, plugins = [] }) => baseConfig({
+  input: './src/index.ts',
+  distSubFile,
+  name,
+  target,
+  format,
+  plugins
+});
+
+const loaderConfig = ({ distSubFile, format, target, name, plugins = [] }) => baseConfig({
+  input: './src/loader/index.ts',
+  distSubFile,
+  name,
+  target,
+  format,
+  plugins
+});
 
 /**
  * This config builds the core lib for webpack users
  * ex: import { initialize } from 'remote-styles';
  */
-const MAIN_MODULE_CONFIG = {
-  input: './src/index.ts',
-  output: {
-    file: './dist/packages-dist/remote-styles/index.js',
-    format: 'esm',
-  },
-  plugins: [
-    typescript({ target: 'esnext' }),
-  ],
-};
+const MAIN_MODULE_CONFIG = mainConfig({
+  distSubFile: 'packages-dist/remote-styles/index.js',
+  format: 'esm',
+  target: 'esnext',
+});
+
 
 /**
  * This config builds the core lib for script tag users
  * ex: <script src="/remote-styles.js"></script>;
  */
-const MAIN_IIFE_CONFIG = {
-  input: './src/index.ts',
-  output: {
-    file: './dist/packages-dist/remote-styles/remote-styles.js',
-    format: 'iife',
-    name: IIFE_NAME,
-  },
-  plugins: [
-    typescript({ target: 'es5' }),
-    uglify(),
-  ],
-};
+const MAIN_IIFE_CONFIG = mainConfig({
+  distSubFile: 'packages-dist/remote-styles/dist/remote-styles.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5'
+});
+
+const MAIN_IIFE_CONFIG_MIN = mainConfig({
+  distSubFile: 'packages-dist/remote-styles/dist/remote-styles.min.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5',
+  plugins: [ uglify() ]
+});
+
 
 /**
  * This config builds the loader lib for webpack users
  * ex: import { initialize } from 'remote-styles/loader';
  */
-const LOADER_MODULE_CONFIG = {
-  input: './src/loader/index.ts',
-  output: {
-    file: './dist/packages-dist/remote-styles/loader/index.js',
-    format: 'esm',
-  },
-  plugins: [
-    typescript({ target: 'esnext' }),
-  ],
-};
+const LOADER_MODULE_CONFIG = loaderConfig({
+  distSubFile: 'packages-dist/remote-styles/loader/index.js',
+  format: 'esm',
+  target: 'esnext',
+});
 
 /**
  * This config builds the loader lib for script tag users
  * ex: <script src="/remote-styles-loader.js"></script>;
  */
-const LOADER_IIFE_CONFIG = {
-  input: './src/loader/index.ts',
-  output: {
-    file: './dist/packages-dist/remote-styles/loader/remote-styles-loader.js',
-    format: 'iife',
-    name: IIFE_NAME,
-  },
-  plugins: [
-    typescript({ target: 'es5' }),
-    uglify(),
-  ],
-};
+const LOADER_IIFE_CONFIG = loaderConfig({
+  distSubFile: 'packages-dist/remote-styles/dist/remote-styles-loader.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5',
+});
+
+const LOADER_IIFE_CONFIG_MIN = loaderConfig({
+  distSubFile: 'packages-dist/remote-styles/dist/remote-styles-loader.min.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5',
+  plugins: [ uglify() ]
+});
+
+/**
+ * CONFIG FOR E2E BUILDS
+ */
+const MAIN_IIFE_SITE_CONFIG = mainConfig({
+  distSubFile: 'site/js/remote-styles.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5',
+  plugins: [ 
+    copy({
+      targets: [
+        { src: './src/site/index.html', dest: './dist/site'}
+      ]
+    })
+  ]
+})
+
 
 export default [
   MAIN_MODULE_CONFIG,
   MAIN_IIFE_CONFIG,
+  MAIN_IIFE_CONFIG_MIN,
   LOADER_MODULE_CONFIG,
   LOADER_IIFE_CONFIG,
+  LOADER_IIFE_CONFIG_MIN,
+  MAIN_IIFE_SITE_CONFIG,
 ];

@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "",
   "main": "index.js",
-  "browser": "remote-styles-loader.js",
+  "browser": "../dist/remote-styles-loader.min.js",
   "keywords": [],
   "author": "<David East: deast@google.com>",
   "license": "Apache 2.0",
