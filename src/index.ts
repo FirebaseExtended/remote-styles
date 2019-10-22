@@ -22,9 +22,8 @@ import { FirebaseApp, RemoteStyle } from './types';
  * @param sheet 
  */
 function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
-  // TODO(davideast): Reject if ownerNode is link[rel="stylesheet"].
   const realSheet = sheet == undefined ? createSheet() : sheet;
-  if(realSheet.ownerNode.nodeName === 'LINK') {
+  if(realSheet.ownerNode != undefined && realSheet.ownerNode.nodeName === 'LINK') {
     throw new Error('<link rel="stylesheet"> are not supported. Use the sheet from a <style></style> tag or a new CSSStyleSheet().');
   }
   return realSheet;

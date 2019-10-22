@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Integration Tests</title>
-  <link rel="stylesheet" href="/js/remote-styles.js">
+  <script src="https://gstatic.com/firebasejs/staging/7.2.1/firebase-app.js"></script>
+  <script src="https://gstatic.com/firebasejs/staging/7.2.1/firebase-remote-config.js"></script>
+  <script src="/js/remote-styles.js"></script>
+  <script>
+    (async function () {
+      const firebaseApp = window.firebase.initializeApp({
+        apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
+        authDomain: "remote-styles.firebaseapp.com",
+        databaseURL: "https://remote-styles.firebaseio.com",
+        projectId: "remote-styles",
+        storageBucket: "remote-styles.appspot.com",
+        messagingSenderId: "1083520640050",
+        appId: "1:1083520640050:web:5fa55b6869a0616644082b",
+        measurementId: "G-3PEBDBCEQD"
+      });
+      const rs = await window.remoteStyles.initialize(firebaseApp);
+      const styles = rs('CSS');
+      styles.insert();
+    }());
+  </script>
   <style>
     body {
       padding: 0;
@@ -12,7 +32,9 @@
     }
   </style>
 </head>
+
 <body>
-  
+  <div id="hello" class="text-bold text-red text-xl">Hello</div>
 </body>
+
 </html>

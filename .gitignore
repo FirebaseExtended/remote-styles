@@ -16,3 +16,9 @@ node_modules
 dist
 *.tgz
 .DS_Store
+
+cypress/fixtures
+cypress/plugins
+cypress/screenshots
+cypress/support
+cypress/videos
