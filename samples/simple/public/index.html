@@ -27,22 +27,22 @@ limitations under the License.
 <body>
   <h1 class="text-bold text-red">Hai</h1>
   <script>
-  const config = {
-    apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
-    authDomain: "remote-styles.firebaseapp.com",
-    databaseURL: "https://remote-styles.firebaseio.com",
-    projectId: "remote-styles",
-    storageBucket: "remote-styles.appspot.com",
-    messagingSenderId: "1083520640050",
-    appId: "1:1083520640050:web:5fa55b6869a0616644082b",
-    measurementId: "G-3PEBDBCEQD"
-  };
-  async function main() {
-    const rs = await remoteStyles.initialize(config);
-    const styles = rs('CSS');
-    styles.insert();
-  }
-  main();
+  (function() {
+    const config = {
+      apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
+      authDomain: "remote-styles.firebaseapp.com",
+      databaseURL: "https://remote-styles.firebaseio.com",
+      projectId: "remote-styles",
+      storageBucket: "remote-styles.appspot.com",
+      messagingSenderId: "1083520640050",
+      appId: "1:1083520640050:web:5fa55b6869a0616644082b",
+      measurementId: "G-3PEBDBCEQD"
+    };
+    remoteStyles.initialize(config).then(function(getStyles) {
+      const styles = getStyles('CSS');
+      styles.insert();
+    });
+  }());
   </script>
 </body>
 

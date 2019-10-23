@@ -18,20 +18,23 @@
 import typescript from 'rollup-plugin-typescript';
 import { uglify } from "rollup-plugin-uglify";
 import copy from 'rollup-plugin-copy'
+import generatePackageJson from 'rollup-plugin-generate-package-json'
 
+const LIB_VERSION = '0.0.3';
 const IIFE_NAME = 'remoteStyles';
+const FIREBASE_VERSION = '^7.0.0';
 
 const baseConfig = ({ input, distSubFile, format, target, name, plugins = [] }) => ({
-    input,
-    output: {
-      file: `./dist/${distSubFile}`,
-      format,
-      name,
-    },
-    plugins:[
-      typescript({ target }),
-      ...plugins
-    ],
+  input,
+  output: {
+    file: `./dist/${distSubFile}`,
+    format,
+    name,
+  },
+  plugins: [
+    typescript({ target }),
+    ...plugins
+  ],
 })
 
 const mainConfig = ({ distSubFile, format, target, name, plugins = [] }) => baseConfig({
@@ -60,8 +63,24 @@ const MAIN_MODULE_CONFIG = mainConfig({
   distSubFile: 'packages-dist/remote-styles/index.js',
   format: 'esm',
   target: 'esnext',
+  plugins: [
+    generatePackageJson({
+      baseContents: {
+        "name": "remote-styles",
+        "version": LIB_VERSION,
+        "description": "",
+        "main": "index.js",
+        "browser": "./dist/remote-styles.min.js",
+        "keywords": [],
+        "author": "<David East: deast@google.com>",
+        "license": "Apache 2.0",
+        "peerDependencies": {
+          "firebase": FIREBASE_VERSION
+        }
+      }
+    })
+  ]
 });
-
 
 /**
  * This config builds the core lib for script tag users
@@ -79,9 +98,8 @@ const MAIN_IIFE_CONFIG_MIN = mainConfig({
   format: 'iife',
   name: IIFE_NAME,
   target: 'es5',
-  plugins: [ uglify() ]
+  plugins: [uglify()]
 });
-
 
 /**
  * This config builds the loader lib for webpack users
@@ -91,6 +109,23 @@ const LOADER_MODULE_CONFIG = loaderConfig({
   distSubFile: 'packages-dist/remote-styles/loader/index.js',
   format: 'esm',
   target: 'esnext',
+  plugins: [
+    generatePackageJson({
+      baseContents: {
+        "name": "remote-styles/loader",
+        "version": LIB_VERSION,
+        "description": "",
+        "main": "index.js",
+        "browser": "../dist/remote-styles-loader.min.js",
+        "keywords": [],
+        "author": "<David East: deast@google.com>",
+        "license": "Apache 2.0",
+        "peerDependencies": {
+          "firebase": FIREBASE_VERSION
+        }
+      }
+    })
+  ]
 });
 
 /**
@@ -109,7 +144,7 @@ const LOADER_IIFE_CONFIG_MIN = loaderConfig({
   format: 'iife',
   name: IIFE_NAME,
   target: 'es5',
-  plugins: [ uglify() ]
+  plugins: [uglify()]
 });
 
 /**
@@ -120,7 +155,7 @@ const MAIN_IIFE_SITE_CONFIG = mainConfig({
   format: 'iife',
   name: IIFE_NAME,
   target: 'es5',
-  plugins: [ 
+  plugins: [
     copy({
       targets: [
         { src: './src/site/index.html', dest: './dist/site' }
@@ -135,7 +170,7 @@ const LOADER_IFFE_SITE_CONFIG = loaderConfig({
   format: 'iife',
   name: IIFE_NAME,
   target: 'es5',
-  plugins: [ 
+  plugins: [
     copy({
       targets: [
         { src: './src/site/loader.html', dest: './dist/site' }
@@ -143,7 +178,6 @@ const LOADER_IFFE_SITE_CONFIG = loaderConfig({
     })
   ]
 });
-
 
 export default [
   MAIN_MODULE_CONFIG,
