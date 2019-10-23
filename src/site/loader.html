@@ -5,12 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Integration Tests</title>
-  <script src="https://gstatic.com/firebasejs/staging/7.2.1/firebase-app.js"></script>
-  <script src="https://gstatic.com/firebasejs/staging/7.2.1/firebase-remote-config.js"></script>
-  <script src="/js/remote-styles.js"></script>
+  <script src="/js/remote-styles-loader.js"></script>
   <script>
     (async function () {
-      const firebaseApp = window.firebase.initializeApp({
+      const getStyles = await window.remoteStyles.initialize({
         apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
         authDomain: "remote-styles.firebaseapp.com",
         databaseURL: "https://remote-styles.firebaseio.com",
@@ -20,7 +18,6 @@
         appId: "1:1083520640050:web:5fa55b6869a0616644082b",
         measurementId: "G-3PEBDBCEQD"
       });
-      const getStyles = await window.remoteStyles.initialize(firebaseApp);
       const styles = getStyles('CSS');
       styles.insert();
     }());

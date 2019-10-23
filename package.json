@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "serve": "serve dist/site -p 5033",
+    "serve:sample:simple": "serve ./samples/simple/public",
     "test": "jest",
     "test:e": "concurrently \"npm run serve\" \"npm run cypress:run\"",
     "cypress:open": "cypress open",

@@ -1,9 +1,9 @@
 /// <reference types="Cypress" />
 
-context('Remote Styles', () => {
+context('Remote Styles - Loader', () => {
 
   beforeEach(() => {
-    cy.visit('http://localhost:5033');
+    cy.visit('http://localhost:5033/loader.html');
   });
 
   it('cy.title() - get the title', () => {
@@ -13,6 +13,7 @@ context('Remote Styles', () => {
   describe('Window tests', () => {
     it('window.remoteStyles - should have the remote styles window object', () => {
       cy.window().should('have.property', 'remoteStyles');
+      cy.window().should('have.property', 'firebase');
     });
   });
 

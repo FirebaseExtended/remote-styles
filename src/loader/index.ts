@@ -131,7 +131,7 @@ function initializeLazyApp(options: any, name = DEFAULT_APP, version = FIREBASE_
  * @param options 
  * @param name 
  */
-function initialize(options: any, { settings, name, version }: LoaderOptions) {
+function initialize(options: any, { settings, name, version }: LoaderOptions = {}) {
   return initializeLazyApp(options, name, version).then(firebaseApp => {
     return initializeRemoteStyles(firebaseApp, settings);
   });

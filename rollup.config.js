@@ -123,11 +123,26 @@ const MAIN_IIFE_SITE_CONFIG = mainConfig({
   plugins: [ 
     copy({
       targets: [
-        { src: './src/site/index.html', dest: './dist/site'}
+        { src: './src/site/index.html', dest: './dist/site' }
       ]
     })
   ]
-})
+});
+
+
+const LOADER_IFFE_SITE_CONFIG = loaderConfig({
+  distSubFile: 'site/js/remote-styles-loader.js',
+  format: 'iife',
+  name: IIFE_NAME,
+  target: 'es5',
+  plugins: [ 
+    copy({
+      targets: [
+        { src: './src/site/loader.html', dest: './dist/site' }
+      ]
+    })
+  ]
+});
 
 
 export default [
@@ -137,5 +152,8 @@ export default [
   LOADER_MODULE_CONFIG,
   LOADER_IIFE_CONFIG,
   LOADER_IIFE_CONFIG_MIN,
+
+  /* e2e configs */
   MAIN_IIFE_SITE_CONFIG,
+  LOADER_IFFE_SITE_CONFIG,
 ];
