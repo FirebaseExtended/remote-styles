@@ -26,15 +26,15 @@ async function importStyles() {
   const firebaseApp = firebase.initializeApp({ 
     /* config */ 
   });
-  const remoteStyles = await initialize(firebaseApp);
-  const styles = remoteStyles('dark_mode');
+  const getStyles = await initialize(firebaseApp);
+  const styles = getStyles('dark_mode');
   styles.insert();
 }
 
 importStyles();
 ```
 
-## Loader Version
+## Script Tags / Loader Version
 
 `remote-styles` has a sub-package that lazy loads Firebase. This is useful for sites that use script tags instad of module bundling.
 
@@ -43,19 +43,13 @@ importStyles();
 <body>
   <script src="/remote-styles-loader.js"></script>
   <script>
-      (async function(window, rs) {
-        const remoteStyles = await rs.initialize({
+      (async function(window, remoteStyles) {
+        const getStyles = await remoteStyles.initialize({
           /* config */
         });
-        const styles = remoteStyles('dark_mode');
+        const styles = getStyles('dark_mode');
         styles.insert();
-      }(window, window.rs));
+      }(window, window.remoteStyles));
   </script>
 </body>
-```
-
-## Storing CSS in Remote Config
-
-```bash
-remote-styles --sa="./sa.json" style.css
 ```
