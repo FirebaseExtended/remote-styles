@@ -73,11 +73,11 @@ const MAIN_MODULE_CONFIG = mainConfig({
       baseContents: {
         "name": "remote-styles",
         "version": LIB_VERSION,
-        "description": "",
+        "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
         "browser": "./dist/remote-styles.min.js",
-        "keywords": [],
-        "author": "<David East: deast@google.com>",
+        "keywords": ['firebase'],
+        "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
         "peerDependencies": {
           "firebase": FIREBASE_VERSION
@@ -119,11 +119,11 @@ const LOADER_MODULE_CONFIG = loaderConfig({
       baseContents: {
         "name": "remote-styles/loader",
         "version": LIB_VERSION,
-        "description": "",
+        "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
         "browser": "../dist/remote-styles-loader.min.js",
-        "keywords": [],
-        "author": "<David East: deast@google.com>",
+        "keywords": ['firebase'],
+        "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
         "peerDependencies": {
           "firebase": FIREBASE_VERSION
@@ -163,7 +163,9 @@ const MAIN_IIFE_SITE_CONFIG = mainConfig({
   plugins: [
     copy({
       targets: [
-        { src: './src/site/index.html', dest: './dist/site' }
+        { src: './src/site/index.html', dest: './dist/site' },
+        { src: './node_modules/firebase/firebase-app.js', dest: './dist/site/js' },
+        { src: './node_modules/firebase/firebase-remote-config.js', dest: './dist/site/js' },
       ]
     })
   ]
