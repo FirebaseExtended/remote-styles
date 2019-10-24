@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-module.exports = {
-  entry: 'index.js',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
+export const config = {
+  apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
+  authDomain: "remote-styles.firebaseapp.com",
+  databaseURL: "https://remote-styles.firebaseio.com",
+  projectId: "remote-styles",
+  storageBucket: "remote-styles.appspot.com",
+  messagingSenderId: "1083520640050",
+  appId: "1:1083520640050:web:5fa55b6869a0616644082b",
+  measurementId: "G-3PEBDBCEQD"
 };

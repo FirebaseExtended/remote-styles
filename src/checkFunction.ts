@@ -15,13 +15,6 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-module.exports = {
-  entry: 'index.js',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
-};
+export function checkFunction(fn?: Function) {
+  return fn == undefined ? () => { } : fn;
+}

@@ -15,13 +15,21 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-module.exports = {
-  entry: 'index.js',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
-};
+/**
+ * Create a CSSStylesheet and attach it to the document.
+ */
+export function createSheet(): CSSStyleSheet {
+  let sheet;
+  try {
+    sheet = new CSSStyleSheet();
+  }
+  catch (e) {
+    const style = document.createElement('style');
+    // WebKit hack
+    style.appendChild(document.createTextNode(''));
+    document.head.appendChild(style);
+    sheet = style.sheet;
+  }
+  // TODO(davideast): Figure out why this returns the wrong type?
+  return sheet as CSSStyleSheet;
+}

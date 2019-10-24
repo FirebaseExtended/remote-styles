@@ -15,6 +15,14 @@
  * limitations under the License.
  */
 
-describe('creating css rules', () => {
+import { NullableFirebaseApp } from '../types';
 
-});
+/**
+ * Check a Firebase App to see if it exists and has the needed features for remote-styles.
+ * @param firebaseApp
+ */
+export function firebaseAppHasNeededFeatures(firebaseApp: NullableFirebaseApp) {
+  return firebaseApp != undefined &&
+    firebaseApp.analytics != undefined &&
+    firebaseApp.remoteConfig != undefined;
+}

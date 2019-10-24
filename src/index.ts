@@ -16,36 +16,8 @@
  */
 
 import { FirebaseApp, RemoteStyle } from './types';
-
-/**
- * Create a new CSSStyleSheet if one is not passed as a parameter
- * @param sheet 
- */
-function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
-  const realSheet = sheet == undefined ? createSheet() : sheet;
-  if(realSheet.ownerNode != undefined && realSheet.ownerNode.nodeName === 'LINK') {
-    throw new Error('<link rel="stylesheet"> are not supported. Use the sheet from a <style></style> tag or a new CSSStyleSheet().');
-  }
-  return realSheet;
-}
-
-/**
- * Create a CSSStylesheet and attach it to the document.
- */
-function createSheet(): CSSStyleSheet {
-  let sheet;
-  try {
-    sheet = new CSSStyleSheet();
-  } catch(e) {
-    const style = document.createElement('style');
-    // WebKit hack
-    style.appendChild(document.createTextNode(''));
-    document.head.appendChild(style);
-    sheet = style.sheet;
-  }
-  // TODO(davideast): Figure out why this returns the wrong type?
-  return sheet as CSSStyleSheet;
-}
+import { checkSheet } from './checkSheet';
+import { checkFunction } from './checkFunction';
 
 function insertCSS(sheet: CSSStyleSheet, css: string) {
   try {
@@ -69,10 +41,6 @@ function remoteStyles(key: string, sheet: CSSStyleSheet, firebaseApp: FirebaseAp
     sheet: () => sheet,
     firebaseApp: () => firebaseApp,
   };
-}
-
-function checkFunction(fn?: Function) {
-  return fn == undefined ? () => {} : fn;
 }
 
 function initialize(firebaseApp: FirebaseApp, optionsCallback?: (app: FirebaseApp) => void) {

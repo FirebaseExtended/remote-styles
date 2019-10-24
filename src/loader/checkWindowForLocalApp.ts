@@ -15,13 +15,22 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import { NullableFirebaseApp } from '../types';
 
-module.exports = {
-  entry: 'index.js',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
-};
+/**
+ * Check the window for an existing Firebase App
+ * @param window
+ * @param options
+ * @param name
+ */
+export function checkWindowForLocalApp(window: any, options: any, name: string): NullableFirebaseApp {
+  if (window.firebase != undefined) {
+    if (window.firebase.apps.length > 0) {
+      return window.firebase.apps.filter(app => app.name === name)[0];
+    }
+    return window.firebase.initializeApp(options);
+  }
+  else {
+    return undefined;
+  }
+}

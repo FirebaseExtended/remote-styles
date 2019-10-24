@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-import { FirebaseFeature, NullableFirebaseApp, LoaderOptions } from '../types';
+import { FirebaseFeature, LoaderOptions } from '../types';
 import { initialize as initializeRemoteStyles } from '../';
+import { checkWindowForLocalApp } from './checkWindowForLocalApp';
+import { firebaseAppHasNeededFeatures } from './firebaseAppHasNeededFeatures';
 
 // Fixed Firebase version to use from CDN
 const FIREBASE_VERSION = '7.2.0';
@@ -81,33 +83,6 @@ function loadFirebaseFeatures(version: string) {
       loadRemoteConfig(version),
     ]).then(modules => modules[0]);
   });
-}
-
-/**
- * Check the window for an existing Firebase App
- * @param window 
- * @param options 
- * @param name 
- */
-function checkWindowForLocalApp(window: any, options: any, name: string): NullableFirebaseApp {
-  if(window.firebase != undefined) {
-    if(window.firebase.apps.length > 0) {
-      return window.firebase.apps.filter(app => app.name === name)[0];
-    }
-    return window.firebase.initializeApp(options);
-  } else {
-    return undefined;
-  }
-}
-
-/**
- * Check a Firebase App to see if it exists and has the needed features for remote-styles.
- * @param firebaseApp 
- */
-function firebaseAppHasNeededFeatures(firebaseApp: NullableFirebaseApp) {
-  return firebaseApp != undefined && 
-         firebaseApp.analytics != undefined && 
-         firebaseApp.remoteConfig != undefined;  
 }
 
 /**

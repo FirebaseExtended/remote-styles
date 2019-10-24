@@ -15,13 +15,16 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import { createSheet } from './createSheet';
 
-module.exports = {
-  entry: 'index.js',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
-};
+/**
+ * Create a new CSSStyleSheet if one is not passed as a parameter
+ * @param sheet
+ */
+export function checkSheet(sheet?: CSSStyleSheet): CSSStyleSheet {
+  const realSheet = sheet == undefined ? createSheet() : sheet;
+  if (realSheet.ownerNode != undefined && realSheet.ownerNode.nodeName === 'LINK') {
+    throw new Error('<link rel="stylesheet"> are not supported. Use the sheet from a <style></style> tag or a new CSSStyleSheet().');
+  }
+  return realSheet;
+}
