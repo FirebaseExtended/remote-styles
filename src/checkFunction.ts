@@ -16,5 +16,5 @@
  */
 
 export function checkFunction(fn?: Function) {
-  return fn == undefined ? () => { } : fn;
+  return fn == undefined ? function() { } : fn;
 }
