@@ -10,7 +10,7 @@
     "cy:run": "cypress run",
     "cy:verify": "cypress verify",
     "rollup": "rollup --config",
-    "serve": "serve dist/site -p 5033",
+    "serve": "serve --no-clipboard dist/site -p 5033",
     "serve:sample:simple": "serve ./samples/simple/public",
     "start:ci": "npm run build && start-server-and-test serve http://localhost:5033 cy:run",
     "test": "jest"
