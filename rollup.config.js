@@ -64,6 +64,11 @@ const MAIN_MODULE_CONFIG = mainConfig({
   format: 'esm',
   target: 'esnext',
   plugins: [
+    copy({
+      targets: [
+        { src: './README.md', dest: './dist/packages-dist/remote-styles' }
+      ]
+    }),
     generatePackageJson({
       baseContents: {
         "name": "remote-styles",
