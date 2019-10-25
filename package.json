@@ -4,7 +4,8 @@
   "description": "Load CSS from Firebase Remote Config",
   "main": "src/index.ts",
   "scripts": {
-    "build": "npm run clean && npm run rollup",
+    "build": "npm run clean && npm run rollup && node after.build.js",
+    "build:dev": "npm run clean && npm run rollup",
     "clean": "rm -rf ./dist",
     "cy:open": "cypress open",
     "cy:run": "cypress run",

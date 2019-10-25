@@ -74,7 +74,7 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "version": LIB_VERSION,
         "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
-        "browser": "./dist/remote-styles.min.js",
+        "browser": "index.js",
         "keywords": ['firebase'],
         "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
@@ -120,7 +120,7 @@ const LOADER_MODULE_CONFIG = loaderConfig({
         "version": LIB_VERSION,
         "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
-        "browser": "../dist/remote-styles-loader.min.js",
+        "browser": "./index.js",
         "keywords": ['firebase'],
         "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
@@ -180,6 +180,7 @@ const LOADER_IFFE_SITE_CONFIG = loaderConfig({
     copy({
       targets: [
         { src: './src/site/loader.html', dest: './dist/site' },
+        { src: './src/site/webpack.html', dest: './dist/site' },
         { src: './webpack.config.js', dest: './dist/site' },
         { src: './index.js', dest: './dist/site' },
       ]
