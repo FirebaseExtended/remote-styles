@@ -41,7 +41,8 @@ importStyles();
 
 ```html
 <body>
-  <script src="/remote-styles-loader.js"></script>
+  <div class="text-main config-dark">This can be configured remotely!</div>
+  <script src="https://unpkg.com/remote-styles/dist/remote-styles-loader.min.js"></script>
   <script>
       (async function(window, remoteStyles) {
         const getStyles = await remoteStyles.initialize({
