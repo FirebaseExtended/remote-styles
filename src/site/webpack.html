@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integration Tests</title>
+  <script src="/js/webpack.bundle.js"></script>
+  <script>
+    (async function () {
+      const firebaseApp = window.firebase.initializeApp({
+        apiKey: "AIzaSyCmZMdR7hR4d8AnT0-cj2LYYUUcFwssA3A",
+        authDomain: "remote-styles.firebaseapp.com",
+        databaseURL: "https://remote-styles.firebaseio.com",
+        projectId: "remote-styles",
+        storageBucket: "remote-styles.appspot.com",
+        messagingSenderId: "1083520640050",
+        appId: "1:1083520640050:web:5fa55b6869a0616644082b",
+        measurementId: "G-3PEBDBCEQD"
+      });
+      const getStyles = await window.remoteStyles.initialize(firebaseApp);
+      const styles = getStyles('CSS');
+      styles.insert();
+    }());
+  </script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="hello" class="text-bold text-red text-xl">Hello</div>
+</body>
+
+</html>

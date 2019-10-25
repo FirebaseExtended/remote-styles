@@ -19,10 +19,9 @@ import typescript from 'rollup-plugin-typescript';
 import { uglify } from "rollup-plugin-uglify";
 import copy from 'rollup-plugin-copy'
 import generatePackageJson from 'rollup-plugin-generate-package-json'
+import { LIB_VERSION, FIREBASE_VERSION } from './versions.json';
 
-const LIB_VERSION = '0.0.3';
 const IIFE_NAME = 'remoteStyles';
-const FIREBASE_VERSION = '^7.0.0';
 
 const baseConfig = ({ input, distSubFile, format, target, name, plugins = [] }) => ({
   input,
@@ -75,7 +74,7 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "version": LIB_VERSION,
         "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
-        "browser": "./dist/remote-styles.min.js",
+        "browser": "index.js",
         "keywords": ['firebase'],
         "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
@@ -121,7 +120,7 @@ const LOADER_MODULE_CONFIG = loaderConfig({
         "version": LIB_VERSION,
         "description": "Load CSS from Firebase Remote Config",
         "main": "index.js",
-        "browser": "../dist/remote-styles-loader.min.js",
+        "browser": "./index.js",
         "keywords": ['firebase'],
         "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
         "license": "Apache 2.0",
@@ -180,7 +179,10 @@ const LOADER_IFFE_SITE_CONFIG = loaderConfig({
   plugins: [
     copy({
       targets: [
-        { src: './src/site/loader.html', dest: './dist/site' }
+        { src: './src/site/loader.html', dest: './dist/site' },
+        { src: './src/site/webpack.html', dest: './dist/site' },
+        { src: './webpack.config.js', dest: './dist/site' },
+        { src: './index.js', dest: './dist/site' },
       ]
     })
   ]

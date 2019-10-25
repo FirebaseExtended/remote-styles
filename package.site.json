@@ -1,0 +1,14 @@
+{
+  "name": "remote-styles-site",
+  "scripts": {
+    "webpack": "webpack"
+  },
+  "dependencies": {
+    "firebase": "^7.0.0",
+    "remote-styles": "./remote-styles.tgz"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  }
+}

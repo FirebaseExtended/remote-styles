@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
 module.exports = {
   entry: './index.js',
   output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
-  },
-  plugins: [ new HtmlWebpackPlugin() ]
+    path: __dirname + '/js',
+    filename: 'webpack.bundle.js'
+  }
 };
