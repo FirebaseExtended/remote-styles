@@ -18,9 +18,8 @@
 import { google } from 'googleapis';
 import * as path from 'path';
 
-function getAccessToken(saPath: string): Promise<string | undefined> {
+function getAccessToken(key: any): Promise<string | undefined> {
   return new Promise(function(resolve, reject) {
-    const key = require(path.join(process.cwd(), saPath));
     const jwtClient = new google.auth.JWT(
       key.client_email,
       undefined,

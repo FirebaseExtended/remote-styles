@@ -25,8 +25,7 @@ const config = getConfig();
 
 interface CLIConfig {
   command: string; 
-  file?: string; 
-  project?: string; 
+  file?: string;  
   saPath?: string;
   out?: string;
   key?: string;
@@ -40,11 +39,17 @@ function getConfig(): CLIConfig {
   // TODO(davideast): Check project in .rsrc.json
   const project = argv.project as string;
   const saPath = argv.sa as string;
-  return { command, file, project, saPath, out, key };
+  return { command, file, saPath, out, key };
 }
 
-async function getCommand({ project, saPath, key, out }: CLIConfig) {
-  const token = await getAccessToken(saPath);
+function getServiceAccount(saPath: string) {
+  return require(path.join(process.cwd(), saPath));
+}
+
+async function getCommand({ saPath, key, out }: CLIConfig) {
+  const serviceAccount = getServiceAccount(saPath);
+  const token = await getAccessToken(serviceAccount);
+  const project = serviceAccount.project_id;
   const resultGet = await getRC({ project, token });
   const css = resultGet.json.parameters[key].defaultValue.value;
   if(out) {
@@ -59,9 +64,11 @@ async function getCommand({ project, saPath, key, out }: CLIConfig) {
   }
 }
 
-async function putCommand({ file, project, saPath, key }: CLIConfig) {
+async function putCommand({ file, saPath, key }: CLIConfig) {
   // TODO(davideast): Look into caching this token
-  const token = await getAccessToken(saPath);
+  const serviceAccount = getServiceAccount(saPath);
+  const token = await getAccessToken(serviceAccount);
+  const project = serviceAccount.project_id;
   const resultGet = await getRC({ project, token });
   const wholeConfig = resultGet.json;
   const etag = resultGet.response.headers.get('etag');

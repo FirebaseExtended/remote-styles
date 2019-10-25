@@ -62,13 +62,10 @@ To use the CLI you'll need to download a Service Account from the Firebase Conso
 
 ### Downloading CSS
 ```bash
-node_modules/.bin/remote-styles get --project="<project-id>" --key="CSS" --sa="./sa.json" --out="styles.css"
+node_modules/.bin/remote-styles get --key="CSS" --sa="./sa.json" --out="styles.css"
 ```
 
 ### Uploading CSS
 ```bash
-node_modules/.bin/remote-styles put --project="<project-id>" --key="CSS" --sa="./sa.json" styles.css
+node_modules/.bin/remote-styles put --key="CSS" --sa="./sa.json" styles.css
 ```
-
-
-
