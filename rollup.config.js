@@ -51,7 +51,16 @@ const loaderConfig = ({ distSubFile, format, target, name, plugins = [] }) => ba
   name,
   target,
   format,
-  plugins
+  plugins,
+});
+
+const cliConfig = ({ distSubFile, format, target, name, plugins = [] }) => baseConfig({
+  input: './src/cli/index.ts',
+  distSubFile,
+  name,
+  target,
+  format,
+  plugins,
 });
 
 /**
@@ -73,6 +82,9 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "name": "remote-styles",
         "version": LIB_VERSION,
         "description": "Load CSS from Firebase Remote Config",
+        "bin": {
+          "remote-styles": "./cli/index.js"
+        },
         "main": "index.js",
         "browser": "index.js",
         "keywords": ['firebase'],
@@ -80,6 +92,11 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "license": "Apache 2.0",
         "peerDependencies": {
           "firebase": FIREBASE_VERSION
+        },
+        "dependencies": {
+          "googleapis": "^44.0.0",
+          "node-fetch": "^2.6.0",
+          "yargs": "^14.2.0"
         }
       }
     })
@@ -188,6 +205,12 @@ const LOADER_IFFE_SITE_CONFIG = loaderConfig({
   ]
 });
 
+const CLI_CONFIG = cliConfig({
+  distSubFile: 'packages-dist/remote-styles/cli/index.js',
+  format: 'commonjs',
+  target: 'esnext',
+});
+
 export default [
   MAIN_MODULE_CONFIG,
   MAIN_IIFE_CONFIG,
@@ -199,4 +222,6 @@ export default [
   /* e2e configs */
   MAIN_IIFE_SITE_CONFIG,
   LOADER_IFFE_SITE_CONFIG,
+
+  CLI_CONFIG,
 ];

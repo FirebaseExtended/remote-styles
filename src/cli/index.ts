@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-import { argv, Argv } from 'yargs';
+import { argv } from 'yargs';
 import { getAccessToken } from './accessToken';
 import { getRC, putRC } from './fetchRC';
 import * as fs from 'fs';
 import * as path from 'path';
-
-console.log(argv);
 
 const config = getConfig();
 
@@ -49,11 +47,16 @@ async function getCommand({ project, saPath, key, out }: CLIConfig) {
   const token = await getAccessToken(saPath);
   const resultGet = await getRC({ project, token });
   const css = resultGet.json.parameters[key].defaultValue.value;
-  const outPath = path.join(process.cwd(), out);
-  fs.writeFile(outPath, css, 'utf8', err => {
-    if(err) { console.log(err); return; }
-    console.log(`Wrote ${outPath}`);
-  });
+  if(out) {
+    const outPath = path.join(process.cwd(), out);
+    // TODO(davideast): Stop being lazy and promisify
+    fs.writeFile(outPath, css, 'utf8', err => {
+      if(err) { console.log(err); return; }
+      console.log(`Wrote ${outPath}`);
+    });
+  } else {
+    console.log(css);
+  }
 }
 
 async function putCommand({ file, project, saPath, key }: CLIConfig) {
@@ -68,7 +71,16 @@ async function putCommand({ file, project, saPath, key }: CLIConfig) {
   const resultPut = await putRC({
     token, body, etag, project
   });
-  console.log(resultPut);
+
+  if(resultPut.response.status === 200) {
+    console.log('Successfully uploaded to Remote Config!');
+  } else {
+    if(resultPut.json.error) {
+      console.log(resultPut.json.error);
+    } else {
+      console.log('Uh oh. Something went really wrong. File an issue on the GitHub repo (https://github.com/FirebaseExtended/remote-styles) and let us know what happened.');
+    }
+  }
 }
 
 function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
