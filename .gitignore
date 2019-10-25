@@ -16,6 +16,8 @@ node_modules
 dist
 *.tgz
 .DS_Store
+sa.json
+styles.css
 
 cypress/fixtures
 cypress/plugins
