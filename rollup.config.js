@@ -209,6 +209,13 @@ const CLI_CONFIG = cliConfig({
   distSubFile: 'packages-dist/remote-styles/cli/index.js',
   format: 'commonjs',
   target: 'esnext',
+  plugins: [
+    copy({
+      targets: [
+        { src: './sa.json', dest: './dist/site' }
+      ]
+    })
+  ]
 });
 
 export default [
