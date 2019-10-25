@@ -18,6 +18,16 @@
 const shell = require('shelljs');
 const { LIB_VERSION } = require('./versions.json');
 const { name } = require('./package.json');
+const fs = require('fs');
+
+// TODO(davideast): Look into using a rollup plugin to fix this hack
+// Right now we have to add "#! /usr/bin/env node" manually to the top of the
+// file so it doesn't error out when used in the CLI
+const cliLines = fs.readFileSync('./dist/packages-dist/remote-styles/cli/index.js')
+  .toString().split('\n');
+cliLines.splice(0, 0, '#! /usr/bin/env node');
+const cliScript = cliLines.join('\n');
+fs.writeFileSync('./dist/packages-dist/remote-styles/cli/index.js', cliScript, 'utf8');
 
 if (shell.exec('npm pack ./dist/packages-dist/remote-styles').code !== 0) {
   shell.echo('Pack failed?');
