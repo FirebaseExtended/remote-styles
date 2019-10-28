@@ -100,11 +100,81 @@ function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
   return JSON.stringify({ parameters: { [key]: { value: cssValue } } });
 }
 
-const commands = {
-  // remote-styles get --key="CSS" --out="styles.css"
-  get: () => { getCommand(config) },
-  // remote-styles put styles.css
-  put: () => { putCommand(config) },
+interface CLICommand {
+  run: () => Promise<void>;
+  help: string;
+}
+
+interface CommandMap {
+  [key: string]: CLICommand
+}
+
+const commands: CommandMap = {
+  get: { 
+    run: () => getCommand(config),
+    help: `
+get [options] 
+
+Description: Get the CSS value from Remote Config 
+
+Required Options: 
+  --key                                           specify the Remote Config parameter 
+Optional Options:
+  --out                                           file to save output
+  --sa                                            location of the service account file if you are not using a .rsrc config file
+  --config                                        The configurations of that parameter 
+
+Examples:
+  remote-styles get --key="my-css" --out="styles.css"    
+  remote-styles get --key="my-css" --out="styles.css" --config
+  remote-styles get --key="my-css" --sa="./service-account.json"
+`
+  },
+  put: { 
+    run: () => putCommand(config),
+    help: `
+put [options] [file]
+
+Description: Upload CSS to Remote Config. *No other parameters are affected* remote-styles merges your changes with your active parameters.
+
+Required Options: 
+  --key                                           specify the Remote Config parameter 
+Optional Options:
+  --out                                           file to save output
+  --sa                                            location of the service account file if you are not using a .rsrc config file
+  --configFile                                    assign a configuration to a parameter, the configuration must be in a .json file
+
+Examples:
+    remote-styles put --key="my-css" styles.css
+    remote-styles put --key="my-css" --sa="./service-account.json" styles.css
+    remote-styles put --key="my-css" --config="rc-config.json" styles.css
+`
+  },
 };
 
-commands[config.command]();
+function getHelp(commands: CommandMap) {
+  const usage = `Usage: remote-styles [options] [command]`;
+  const options = `Options:
+  --help                                          output usage information`;
+
+  const commandHelp = Object.keys(commands).map(key => commands[key].help).join('\n');
+
+  const printCommands = `Commands:
+${commandHelp}
+`;
+  return `${usage}
+
+${options}
+${commandHelp}
+`;
+}
+
+try {
+  const command = commands[config.command];
+  if(command == undefined) {
+    console.log(getHelp(commands));
+  }
+  command.run();
+} catch(error) {
+  getHelp(commands);
+}
