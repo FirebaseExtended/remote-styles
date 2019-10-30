@@ -30,12 +30,12 @@ context('Remote Styles - Main', () => {
   describe('Window tests', () => {
     it('window.remoteStyles - should have the remote styles window object', () => {
       cy.window().should('have.property', 'remoteStyles');
+      cy.wait(10000);
     });
   });
 
   describe('Added styles', () => {
     it('should make the hello div red (rgb(255, 0, 0))', () => {
-      cy.wait(10000);
       cy.get('#hello').should('have.css', 'color', 'rgb(255, 0, 0)');
     });
 
