@@ -35,7 +35,7 @@ context('Remote Styles - Main', () => {
 
   describe('Added styles', () => {
     it('should make the hello div red (rgb(255, 0, 0))', () => {
-      cy.wait(7000);
+      cy.wait(10000);
       cy.get('#hello').should('have.css', 'color', 'rgb(255, 0, 0)');
     });
 
