@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+/**
+ * This is for the e2e cypress test, to make sure webpack users
+ * are not broken. The build is triggered in after.build.js
+ */
 module.exports = {
   entry: './index.js',
   output: {

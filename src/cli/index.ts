@@ -20,6 +20,7 @@ import { getAccessToken } from './accessToken';
 import { getRC, putRC } from './fetchRC';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as stylis from 'stylis';
 
 const config = getConfig();
 
@@ -36,8 +37,6 @@ function getConfig(): CLIConfig {
   const file = argv._[1];
   const out = argv.out as string;
   const key = argv.key as string;
-  // TODO(davideast): Check project in .rsrc.json
-  const project = argv.project as string;
   const saPath = argv.sa as string;
   return { command, file, saPath, out, key };
 }
@@ -73,7 +72,13 @@ async function putCommand({ file, saPath, key }: CLIConfig) {
   const wholeConfig = resultGet.json;
   const etag = resultGet.response.headers.get('etag');
   // TODO(davideast): Stop being lazy, make async
-  const cssValue = fs.readFileSync(path.join(process.cwd(), file), 'utf8');
+  const rawCSS = fs.readFileSync(path.join(process.cwd(), file), 'utf8');
+
+  // Stylis.js will compress and do a good job to unmangle inproper css
+  const validator = new stylis();
+  validator.set({ prefix: false, compress: true });
+  const cssValue = validator('', rawCSS);
+  
   const body = creadyRequestBody({ cssValue, wholeConfig, key });
   const resultPut = await putRC({
     token, body, etag, project
@@ -100,11 +105,90 @@ function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
   return JSON.stringify({ parameters: { [key]: { value: cssValue } } });
 }
 
-const commands = {
-  // remote-styles get --key="CSS" --out="styles.css"
-  get: () => { getCommand(config) },
-  // remote-styles put styles.css
-  put: () => { putCommand(config) },
+interface CLICommand {
+  run: Function;
+  help: string;
+}
+
+interface CommandMap {
+  [key: string]: CLICommand
+}
+
+const commands: CommandMap = {
+  get: { 
+    run: () => getCommand(config),
+    help: `
+get [options] 
+
+Description: Get the CSS value from Remote Config 
+
+Required Options: 
+  --key                                           specify the Remote Config parameter 
+Optional Options:
+  --out                                           file to save output
+  --sa                                            location of the service account file
+
+Examples:
+  remote-styles get --key="my-css" --out="styles.css" --sa="./service-account.json"
+  remote-styles get --key="my-css" --out="styles.css" --sa="./service-account.json"
+  remote-styles get --key="my-css" --sa="./service-account.json"
+`
+  },
+  put: { 
+    run: () => putCommand(config),
+    help: `
+put [options] [file]
+
+Description: Upload CSS to Remote Config. *No other parameters are affected* remote-styles merges your changes with your active parameters.
+
+Required Options: 
+  --key                                           specify the Remote Config parameter 
+Optional Options:
+  --out                                           file to save output
+  --sa                                            location of the service account file
+
+Examples:
+    remote-styles put --key="my-css" --sa="./service-account.json" styles.css
+`
+  },
+  version: {
+    run: () => {
+      console.log(require('../package.json').version);
+    },
+    help: '',
+  },
+  help: {
+    run: () => {
+      console.log(getHelp(commands));
+    },
+    help: ''
+  }
 };
 
-commands[config.command]();
+function getHelp(commands: CommandMap) {
+  const usage = `Usage: remote-styles [options] [command]`;
+  const options = `Options:
+  help                                            output usage information
+  version                                         get the current version`;
+
+  const commandHelp = Object.keys(commands).map(key => commands[key].help).join('\n');
+
+  const printCommands = `Commands:
+${commandHelp}
+`;
+  return `${usage}
+
+${options}
+${printCommands}
+`;
+}
+
+try {
+  const command = commands[config.command];
+  if(command == undefined) {
+    console.log(getHelp(commands));
+  }
+  command.run();
+} catch(error) {
+  getHelp(commands);
+}

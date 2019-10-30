@@ -30,6 +30,7 @@ context('Remote Styles - Main', () => {
   describe('Window tests', () => {
     it('window.remoteStyles - should have the remote styles window object', () => {
       cy.window().should('have.property', 'remoteStyles');
+      cy.wait(10000);
     });
   });
 

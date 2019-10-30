@@ -8,6 +8,7 @@
     "build:dev": "npm run clean && npm run rollup",
     "cli:dev": "ts-node --project tsconfig.cli.json ./src/cli/index.ts get --project=\"remote-styles\" --sa=\"./sa.json\" --out=\"styles.css\" --key=\"CSS\"",
     "cli:put": "ts-node --project tsconfig.cli.json ./src/cli/index.ts put --project=\"remote-styles\" --sa=\"./sa.json\" --key=\"CSS2\" styles.css",
+    "cli:help": "ts-node --project tsconfig.cli.json ./src/cli/index.ts",
     "clean": "rm -rf ./dist",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -25,6 +26,7 @@
     "firebase": "^7.2.0",
     "googleapis": "^44.0.0",
     "node-fetch": "^2.6.0",
+    "stylis": "^3.5.4",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
