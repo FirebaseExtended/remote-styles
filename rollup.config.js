@@ -187,7 +187,6 @@ const MAIN_IIFE_SITE_CONFIG = mainConfig({
   ]
 });
 
-
 const LOADER_IFFE_SITE_CONFIG = loaderConfig({
   distSubFile: 'site/js/remote-styles-loader.js',
   format: 'iife',

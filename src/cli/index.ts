@@ -121,12 +121,11 @@ Required Options:
   --key                                           specify the Remote Config parameter 
 Optional Options:
   --out                                           file to save output
-  --sa                                            location of the service account file if you are not using a .rsrc config file
-  --config                                        The configurations of that parameter 
+  --sa                                            location of the service account file
 
 Examples:
-  remote-styles get --key="my-css" --out="styles.css"    
-  remote-styles get --key="my-css" --out="styles.css" --config
+  remote-styles get --key="my-css" --out="styles.css" --sa="./service-account.json"
+  remote-styles get --key="my-css" --out="styles.css" --sa="./service-account.json"
   remote-styles get --key="my-css" --sa="./service-account.json"
 `
   },
@@ -141,13 +140,10 @@ Required Options:
   --key                                           specify the Remote Config parameter 
 Optional Options:
   --out                                           file to save output
-  --sa                                            location of the service account file if you are not using a .rsrc config file
-  --configFile                                    assign a configuration to a parameter, the configuration must be in a .json file
+  --sa                                            location of the service account file
 
 Examples:
-    remote-styles put --key="my-css" styles.css
     remote-styles put --key="my-css" --sa="./service-account.json" styles.css
-    remote-styles put --key="my-css" --config="rc-config.json" styles.css
 `
   },
 };
@@ -155,7 +151,8 @@ Examples:
 function getHelp(commands: CommandMap) {
   const usage = `Usage: remote-styles [options] [command]`;
   const options = `Options:
-  --help                                          output usage information`;
+  --help                                          output usage information
+  --version                                       get the current version`;
 
   const commandHelp = Object.keys(commands).map(key => commands[key].help).join('\n');
 
@@ -165,7 +162,7 @@ ${commandHelp}
   return `${usage}
 
 ${options}
-${commandHelp}
+${printCommands}
 `;
 }
 
