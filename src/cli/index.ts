@@ -182,7 +182,7 @@ ${options}
 ${printCommands}
 `;
 }
-console.log('what');
+
 try {
   const command = commands[config.command];
   if(command == undefined) {
