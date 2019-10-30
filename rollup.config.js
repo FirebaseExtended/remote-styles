@@ -96,6 +96,7 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "dependencies": {
           "googleapis": "^44.0.0",
           "node-fetch": "^2.6.0",
+          "stylis": "^3.5.4",
           "yargs": "^14.2.0"
         }
       }

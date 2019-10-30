@@ -17,7 +17,7 @@
 
 /// <reference types="Cypress" />
 
-context('Remote Styles - Loader', () => {
+context('Remote Styles - Webpack', () => {
 
   beforeEach(() => {
     cy.visit('http://localhost:5033/webpack.html');

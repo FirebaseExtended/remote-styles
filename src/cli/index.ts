@@ -106,7 +106,7 @@ function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
 }
 
 interface CLICommand {
-  run: () => Promise<void>;
+  run: Function;
   help: string;
 }
 
@@ -151,13 +151,25 @@ Examples:
     remote-styles put --key="my-css" --sa="./service-account.json" styles.css
 `
   },
+  version: {
+    run: () => {
+      console.log(require('../package.json').version);
+    },
+    help: '',
+  },
+  help: {
+    run: () => {
+      console.log(getHelp(commands));
+    },
+    help: ''
+  }
 };
 
 function getHelp(commands: CommandMap) {
   const usage = `Usage: remote-styles [options] [command]`;
   const options = `Options:
-  --help                                          output usage information
-  --version                                       get the current version`;
+  help                                            output usage information
+  version                                         get the current version`;
 
   const commandHelp = Object.keys(commands).map(key => commands[key].help).join('\n');
 
@@ -170,7 +182,7 @@ ${options}
 ${printCommands}
 `;
 }
-
+console.log('what');
 try {
   const command = commands[config.command];
   if(command == undefined) {
