@@ -20,6 +20,7 @@ import { getAccessToken } from './accessToken';
 import { getRC, putRC } from './fetchRC';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as stylis from 'stylis';
 
 const config = getConfig();
 
@@ -36,8 +37,6 @@ function getConfig(): CLIConfig {
   const file = argv._[1];
   const out = argv.out as string;
   const key = argv.key as string;
-  // TODO(davideast): Check project in .rsrc.json
-  const project = argv.project as string;
   const saPath = argv.sa as string;
   return { command, file, saPath, out, key };
 }
@@ -73,7 +72,13 @@ async function putCommand({ file, saPath, key }: CLIConfig) {
   const wholeConfig = resultGet.json;
   const etag = resultGet.response.headers.get('etag');
   // TODO(davideast): Stop being lazy, make async
-  const cssValue = fs.readFileSync(path.join(process.cwd(), file), 'utf8');
+  const rawCSS = fs.readFileSync(path.join(process.cwd(), file), 'utf8');
+
+  // Stylis.js will compress and do a good job to unmangle inproper css
+  const validator = new stylis();
+  validator.set({ prefix: false, compress: true });
+  const cssValue = validator('', rawCSS);
+  
   const body = creadyRequestBody({ cssValue, wholeConfig, key });
   const resultPut = await putRC({
     token, body, etag, project
