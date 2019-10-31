@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "copy:firebase": "cp ./node_modules/firebase/firebase.js ./public/js/firebase.js",
-    "copy:rs": "cp ./node_modules/remote-styles/loader/remote-styles-loader.js ./public/js/remote-styles-loader.js",
+    "copy:rs": "cp ./node_modules/remote-styles/dist/remote-styles-loader.js ./public/js/remote-styles-loader.js",
     "clean": "rm -rf ./public/js && mkdir ./public/js",
     "build": "npm run clean && npm run copy:rs"
   },
