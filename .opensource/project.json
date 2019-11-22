@@ -1,0 +1,10 @@
+{
+  "name": "Remote Styles",
+  "platforms": [ "Web" ],
+  "content": "README.md",
+  "pages" : { },
+  "related": [ ],
+  "tabs": [
+      { "title": "NPM", "href": "https://npmjs.com/package/remote-styles" }
+  ]
+}

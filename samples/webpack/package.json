@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack"
+    "start": "webpack-dev-server"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,6 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
-    "remote-styles": "0.0.5"
+    "remote-styles": "0.0.6"
   }
 }
