@@ -2,10 +2,12 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "es2015",
-    "outDir": "dist",
+    "outDir": "dist/packages-dist/remote-styles",
     "moduleResolution": "node",
     "strict": true,
-    "removeComments": true
+    "removeComments": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
   },
   "files": [
     "src/index.ts",

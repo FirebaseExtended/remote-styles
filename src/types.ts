@@ -18,12 +18,6 @@
 type FirebaseApp = import('firebase/app').app.App;
 type NullableFirebaseApp = FirebaseApp | null | undefined;
 
-enum FirebaseFeature {
-  app = 'app',
-  analytics = 'analytics',
-  remoteConfig = 'remote-config',
-}
-
 interface RemoteStyle {
   insert: Function,
   asString: () => string,
@@ -41,7 +35,6 @@ export {
   FirebaseApp,
   NullableFirebaseApp,
 
-  FirebaseFeature,
   RemoteStyle,
   LoaderOptions,
 };

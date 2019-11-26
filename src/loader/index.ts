@@ -15,13 +15,19 @@
  * limitations under the License.
  */
 
-import { FirebaseFeature, LoaderOptions } from '../types';
+import { LoaderOptions } from '../types';
 import { initialize as initializeRemoteStyles } from '../';
 import { checkWindowForLocalApp } from './checkWindowForLocalApp';
 import { firebaseAppHasNeededFeatures } from './firebaseAppHasNeededFeatures';
 
+const enum FirebaseFeature {
+  app = 'app',
+  analytics = 'analytics',
+  remoteConfig = 'remote-config',
+}
+
 // Fixed Firebase version to use from CDN
-const FIREBASE_VERSION = '7.2.0';
+const FIREBASE_VERSION = '7.5.0';
 // Default name of a Firebase app when no name is provided
 const DEFAULT_APP = '[DEFAULT]';
 

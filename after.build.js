@@ -29,6 +29,11 @@ cliLines.splice(0, 0, '#! /usr/bin/env node');
 const cliScript = cliLines.join('\n');
 fs.writeFileSync('./dist/packages-dist/remote-styles/cli/index.js', cliScript, 'utf8');
 
+if (shell.exec('node_modules/.bin/tsc').code !== 0) {
+  shell.echo('Typings failed?');
+  shell.exit(1);
+}
+
 if (shell.exec('npm pack ./dist/packages-dist/remote-styles').code !== 0) {
   shell.echo('Pack failed?');
   shell.exit(1);
