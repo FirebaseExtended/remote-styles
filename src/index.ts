@@ -53,4 +53,4 @@ function initialize(firebaseApp: FirebaseApp, optionsCallback?: (app: FirebaseAp
 }
 
 /* initialize should be the only export */
-export {  initialize };
+export { initialize };

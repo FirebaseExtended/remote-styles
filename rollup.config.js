@@ -31,8 +31,8 @@ const baseConfig = ({ input, distSubFile, format, target, name, plugins = [] }) 
     name,
   },
   plugins: [
+    ...plugins,
     typescript({ target }),
-    ...plugins
   ],
 })
 
@@ -85,6 +85,7 @@ const MAIN_MODULE_CONFIG = mainConfig({
         "bin": {
           "remote-styles": "./cli/index.js"
         },
+        "types": "index.d.ts",
         "main": "index.js",
         "browser": "index.js",
         "keywords": ['firebase'],
@@ -100,7 +101,7 @@ const MAIN_MODULE_CONFIG = mainConfig({
           "yargs": "^14.2.0"
         }
       }
-    })
+    }),
   ]
 });
 
@@ -220,6 +221,7 @@ const CLI_CONFIG = cliConfig({
 
 export default [
   MAIN_MODULE_CONFIG,
+  
   MAIN_IIFE_CONFIG,
   MAIN_IIFE_CONFIG_MIN,
   LOADER_MODULE_CONFIG,
