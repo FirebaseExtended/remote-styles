@@ -97,8 +97,11 @@ async function putCommand({ file, saPath, key }: CLIConfig) {
 
 function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
   if(merge) {
+    // create an empty object if no default value exists
+    if (wholeConfig.parameters[key] == undefined) {
+      wholeConfig.parameters[key] = { defaultValue: { value: null } };
+    }
     // write over the key only, merge with the rest of the config
-    wholeConfig.parameters[key] = { defaultValue: { value: null } };
     wholeConfig.parameters[key].defaultValue.value = cssValue;
     return JSON.stringify(wholeConfig);
   }
