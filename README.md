@@ -1,6 +1,8 @@
 # remote-styles
 
-> Load CSS from Firebase Remote Config
+> Conditionally load CSS from Firebase Remote Config
+
+### Status: Alpha
 
 ## Install
 ```bash
@@ -59,13 +61,18 @@ importStyles();
 
 To use the CLI you'll need to download a Service Account from the Firebase Console.
 
-
 ### Downloading CSS
+
+Downloading CSS currently works only with default parameters.
+
 ```bash
 node_modules/.bin/remote-styles get --key="CSS" --sa="./sa.json" --out="styles.css"
 ```
 
 ### Uploading CSS
+
+Uploading CSS currently works only with default parameters.
+
 ```bash
 node_modules/.bin/remote-styles put --key="CSS" --sa="./sa.json" styles.css
 ```
