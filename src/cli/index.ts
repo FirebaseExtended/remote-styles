@@ -98,6 +98,9 @@ async function putCommand({ file, saPath, key }: CLIConfig) {
 function creadyRequestBody({ cssValue, wholeConfig, key }, merge = true) {
   if(merge) {
     // create an empty object if no default value exists
+    if(wholeConfig.parameters == undefined) {
+      wholeConfig.parameters = {};
+    }
     if (wholeConfig.parameters[key] == undefined) {
       wholeConfig.parameters[key] = { defaultValue: { value: null } };
     }
